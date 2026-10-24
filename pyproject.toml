@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "varritech-ai-agent-audit"
+version = "0.1.0"
+description = "Audit the AI coding agents running on your machine — before they leak your repo."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Varritech", email = "christian@varritech.com" }]
+requires-python = ">=3.10"
+dependencies = [
+    "psutil>=5.9",
+    "PyYAML>=6.0",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3",
+    "Topic :: Security",
+    "Topic :: Software Development",
+]
+
+[project.scripts]
+vaia = "cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Varritech/varritech-ai-agent-audit"
+
+[tool.setuptools.packages.find]
+include = ["scanner*"]
+
+[tool.setuptools.package-data]
+scanner = ["*.yaml"]
