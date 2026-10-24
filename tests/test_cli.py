@@ -29,7 +29,7 @@ def test_ci_fails_when_high_secret_in_history(tmp_git_repo):
     import subprocess
 
     (tmp_git_repo / "leaked.py").write_text(
-        'AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE"\n', encoding="utf-8"
+        'AWS_ACCESS_KEY_ID = "AKIAREDACTEDNOTREAL0"\n', encoding="utf-8"
     )
     subprocess.check_call(
         ["git", "-C", str(tmp_git_repo), "add", "leaked.py"],
