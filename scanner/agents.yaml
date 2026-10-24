@@ -1,0 +1,143 @@
+# Known AI coding agents — used by the process + network audit modules.
+#
+# Each entry maps a known closed-source or open-source AI coding harness to:
+#   - binary patterns to look for in running processes
+#   - vendor domains to mark as "known" in the network audit
+#   - risk tier (low = open source + auditable, medium = mostly auditable,
+#     high = closed source, opaque upload behaviour, or recent abuse reports)
+#
+# Add your own agent below. The file is re-read on every CLI run — no rebuild.
+
+version: 1
+last_updated: 2026-09-18
+
+agents:
+  - name: cursor
+    display_name: Cursor
+    binary_patterns:
+      - "/Cursor"
+      - "Cursor.app/Contents/MacOS/Cursor"
+    vendor_domains:
+      - "api.cursor.sh"
+      - "telemetry.cursor.sh"
+      - "cursor.sh"
+    risk_tier: medium
+    closed_source: true
+
+  - name: continue
+    display_name: Continue.dev
+    binary_patterns:
+      - "continue"
+      - ".continue"
+    vendor_domains:
+      - "api.continue.dev"
+      - "continue.dev"
+    risk_tier: low
+    closed_source: false
+
+  - name: aider
+    display_name: Aider
+    binary_patterns:
+      - "aider"
+    vendor_domains:
+      - "openrouter.ai"
+      - "api.openai.com"
+      - "api.anthropic.com"
+    risk_tier: low
+    closed_source: false
+
+  - name: cline
+    display_name: Cline (VS Code ext.)
+    binary_patterns:
+      - "claude-dev"
+      - "cline"
+      - "saoudrizwan.claude-dev"
+    vendor_domains:
+      - "api.anthropic.com"
+      - "api.openai.com"
+      - "api.cline.bot"
+    risk_tier: medium
+    closed_source: false
+
+  - name: cody
+    display_name: Sourcegraph Cody
+    binary_patterns:
+      - "cody"
+      - "sourcegraph.cody"
+    vendor_domains:
+      - "sourcegraph.com"
+      - "api.sourcegraph.com"
+    risk_tier: medium
+    closed_source: false
+
+  - name: windsurf
+    display_name: Windsurf (Codeium)
+    binary_patterns:
+      - "Windsurf"
+      - "windsurf"
+    vendor_domains:
+      - "codeium.com"
+      - "api.codeium.com"
+    risk_tier: medium
+    closed_source: true
+
+  - name: claude_code
+    display_name: Claude Code (Anthropic CLI)
+    binary_patterns:
+      - "claude-code"
+      - "@anthropic-ai/claude-code"
+    vendor_domains:
+      - "api.anthropic.com"
+    risk_tier: low
+    closed_source: false
+
+  - name: zcode
+    display_name: ZCode (Z.ai desktop)
+    binary_patterns:
+      - "ZCode.app"
+      - "/ZCode"
+      - "zcode"
+    vendor_domains:
+      # Z.ai public infrastructure. The Sept 18 2026 incident showed encrypted
+      # workspace archives being uploaded to Alibaba Cloud OSS; treat anything
+      # in the z.ai / aliyuncs.com space as unknown until they publish transparency.
+      - "z.ai"
+      - "aliyuncs.com"
+    risk_tier: high
+    closed_source: true
+    notes: |
+      Sept 18 2026: ferstar disclosed that ZCode silently uploads encrypted full
+      .git/ history to Aliyun OSS, with a key only the vendor can use. Treat
+      this agent as untrusted until Z.ai publishes a transparency report.
+
+  - name: zed_ai
+    display_name: Zed (with AI features)
+    binary_patterns:
+      - "/Zed"
+      - "Zed.app"
+    vendor_domains:
+      - "api.openai.com"
+      - "api.anthropic.com"
+    risk_tier: low
+    closed_source: false
+
+  - name: copilot
+    display_name: GitHub Copilot
+    binary_patterns:
+      - "github.copilot"
+      - "copilot"
+    vendor_domains:
+      - "api.githubcopilot.com"
+      - "copilot-proxy.githubusercontent.com"
+    risk_tier: medium
+    closed_source: true
+
+# Generic fallback for any process whose binary matches a known agent tool name
+# but isn't in the list above. Used by the process audit to flag unknowns.
+generic_ai_patterns:
+  - "claude"
+  - "gpt"
+  - "llm"
+  - "agent"
+  - "copilot"
+  - "chat"
